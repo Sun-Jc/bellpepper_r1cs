@@ -31,6 +31,12 @@ impl<Scalar: PrimeField> ConstraintSystemWithInputsOutputs<Scalar> {
         num_aux: usize,
         constraints: &[(LinearCombination<Scalar>, LinearCombination<Scalar>, LinearCombination<Scalar>)],
     ) -> Self {
+        {
+            outputs.iter().for_each(|v| {
+                assert!(matches!(v, VIndex::Input(_)));
+            });
+        }
+
         let num_outputs = outputs.len();
 
         let mut res = Self {
