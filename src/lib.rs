@@ -2,6 +2,8 @@
 // ! Output variables must be specified by the user, or all public variables will be considered as inputs.
 // ! Note: Constant One will be inserted as the first public input, every original input variable id will increase by 1
 
+// Adapted from zokrates-circom
+
 use bellpepper_core::Index as VIndex;
 use bellpepper_core::LinearCombination;
 use ff::{PrimeField, PrimeFieldBits};
