@@ -1,7 +1,7 @@
 // ! Adapted from bellpepper/test_cs
-use std::collections::HashMap;
 use bellpepper_core::{ConstraintSystem, Index, LinearCombination, SynthesisError, Variable};
 use ff::PrimeField;
+use std::collections::HashMap;
 
 #[allow(dead_code)]
 #[derive(Debug)]
@@ -30,10 +30,7 @@ pub struct FormCS<Scalar: PrimeField> {
 impl<Scalar: PrimeField> Default for FormCS<Scalar> {
     fn default() -> Self {
         let mut map = HashMap::new();
-        map.insert(
-            "ONE".into(),
-            NamedObject::Var(FormCS::<Scalar>::one()),
-        );
+        map.insert("ONE".into(), NamedObject::Var(FormCS::<Scalar>::one()));
 
         FormCS {
             named_objects: map,
@@ -144,5 +141,16 @@ impl<Scalar: PrimeField> ConstraintSystem<Scalar> for FormCS<Scalar> {
 
     fn get_root(&mut self) -> &mut <Self as ConstraintSystem<Scalar>>::Root {
         self
+    }
+}
+
+impl<Scalar: PrimeField> FormCS<Scalar> {
+    pub fn fix_a_variable(&mut self, var: Variable, value: Scalar) {
+        self.enforce(
+            || format!("var-{:?}-fixed", var.0),
+            |lc| lc,
+            |lc| lc,
+            |lc| lc + var - (value, Self::one()),
+        );
     }
 }
